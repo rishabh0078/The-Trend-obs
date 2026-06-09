@@ -7,146 +7,124 @@ const categories = [
 ];
 ---
 
-<header id="site-header" class="w-full bg-canvas/95 backdrop-blur-md border-b border-hairline sticky top-0 z-50 transition-all duration-300">
-  
-  <!-- Top mini-bar: hidden when scrolled -->
-  <div id="header-topbar" class="hidden md:flex justify-between items-center px-6 py-2 border-b border-hairline text-xs font-mono tracking-wider text-mute uppercase bg-canvas-soft transition-all duration-300 overflow-hidden">
-    <div id="live-date">Loading date...</div>
-    <div class="flex items-center space-x-4">
-      <span class="font-bold text-highlight-pink animate-pulse">Trending:</span>
-      <a href="/posts/future-of-generative-ai" class="hover:text-primary transition-colors">Generative AI 2026</a>
-      <span class="text-hairline-strong">|</span>
-      <a href="/posts/why-tiktok-creators-are-moving" class="hover:text-primary transition-colors">Creator Economy</a>
-    </div>
+<!-- ① Thin breaking-news bar — normal flow, scrolls away naturally -->
+<div class="hidden md:flex justify-between items-center px-6 py-2 border-b border-hairline text-[11px] font-mono tracking-wider text-mute uppercase bg-canvas-soft">
+  <div id="live-date">Loading date...</div>
+  <div class="flex items-center gap-4">
+    <span class="font-bold text-highlight-pink">Trending:</span>
+    <a href="/posts/future-of-generative-ai" class="hover:text-primary transition-colors">Generative AI 2026</a>
+    <span class="text-hairline">|</span>
+    <a href="/posts/why-tiktok-creators-are-moving" class="hover:text-primary transition-colors">Creator Economy</a>
   </div>
+</div>
 
-  <!-- Main logo section: shrinks on scroll -->
-  <div id="header-logo" class="flex flex-col items-center justify-center py-6 px-4 relative transition-all duration-300">
-    <a href="/" class="group">
-      <p id="header-wordmark" class="font-sans font-extrabold text-3xl md:text-5xl lg:text-6xl tracking-tighter uppercase text-primary transition-all duration-300 relative select-none text-center">
-        The Daily <span class="bg-clip-text text-transparent bg-gradient-to-r from-gradient-dev-start via-violet to-highlight-pink">Drift</span>
-      </p>
-      <p id="header-tagline" class="text-center font-mono text-[9px] md:text-xs tracking-[0.3em] uppercase text-mute mt-1 group-hover:text-primary transition-all duration-300">
-        The Authority on Tech, Culture &amp; Reviews
-      </p>
-    </a>
-  </div>
+<!-- ② Large logo section — normal flow, scrolls away naturally -->
+<div id="main-logo-section" class="flex flex-col items-center justify-center py-5 px-4 bg-canvas border-b border-hairline">
+  <a href="/" class="group text-center">
+    <p class="font-sans font-extrabold text-4xl md:text-6xl tracking-tighter uppercase text-primary select-none">
+      The Daily <span class="bg-clip-text text-transparent bg-gradient-to-r from-gradient-dev-start via-violet to-highlight-pink">Drift</span>
+    </p>
+    <p class="font-mono text-[9px] md:text-[11px] tracking-[0.35em] uppercase text-mute mt-1">
+      The Authority on Tech, Culture &amp; Reviews
+    </p>
+  </a>
+</div>
 
-  <!-- Navigation bar: always visible -->
-  <nav class="border-t border-hairline bg-canvas/80 backdrop-blur-sm">
-    <div class="max-w-6xl mx-auto px-4">
-      <div class="flex items-center justify-between h-12">
-        
-        <!-- Compact logo that appears only when scrolled (desktop) -->
-        <a id="compact-logo" href="/" class="hidden font-sans font-black text-base tracking-tighter uppercase text-primary opacity-0 transition-opacity duration-300 pointer-events-none select-none shrink-0 mr-4">
-          The Daily <span class="bg-clip-text text-transparent bg-gradient-to-r from-gradient-dev-start to-highlight-pink">Drift</span>
-        </a>
+<!-- ③ Navigation bar — STICKY via pure CSS, no JS needed -->
+<header class="sticky top-0 z-50 w-full bg-canvas/95 backdrop-blur-sm border-b border-hairline">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="flex items-center h-12 gap-4">
 
-        <!-- Desktop Nav -->
-        <ul class="hidden md:flex space-x-1 lg:space-x-2 mx-auto font-sans font-semibold text-sm tracking-wide text-body">
+      <!-- Compact logo: hidden at top, revealed by IntersectionObserver when main logo scrolls out -->
+      <a id="nav-compact-logo" href="/"
+         class="hidden md:block font-sans font-black text-sm tracking-tighter uppercase text-primary opacity-0 pointer-events-none transition-opacity duration-200 shrink-0 whitespace-nowrap">
+        The Daily <span class="bg-clip-text text-transparent bg-gradient-to-r from-gradient-dev-start to-highlight-pink">Drift</span>
+      </a>
+
+      <!-- Category nav — centered on desktop -->
+      <nav class="flex-1 flex items-center justify-center md:justify-center">
+        <ul class="hidden md:flex items-center gap-0.5 font-sans font-semibold text-[13px] tracking-wide text-body">
           <li>
-            <a href="/" class="px-3 py-1.5 hover:text-primary hover:bg-canvas-soft-2 rounded-md transition-all">Home</a>
+            <a href="/" class="px-3 py-2 rounded hover:text-primary hover:bg-canvas-soft-2 transition-colors block">Home</a>
           </li>
           {categories.map((cat) => (
             <li>
-              <a href={`/${cat.slug}`} class="px-3 py-1.5 hover:text-primary hover:bg-canvas-soft-2 rounded-md transition-all whitespace-nowrap">
+              <a href={`/${cat.slug}`} class="px-3 py-2 rounded hover:text-primary hover:bg-canvas-soft-2 transition-colors block whitespace-nowrap">
                 {cat.name}
               </a>
             </li>
           ))}
         </ul>
 
-        <!-- Mobile Nav Toggle -->
-        <div class="flex md:hidden items-center justify-between w-full">
-          <a href="/" class="font-sans font-black text-base tracking-tighter uppercase text-primary">
-            The Daily <span class="bg-clip-text text-transparent bg-gradient-to-r from-gradient-dev-start to-highlight-pink">Drift</span>
-          </a>
-          <button id="mobile-menu-btn" class="p-2 rounded-md text-body hover:text-primary hover:bg-canvas-soft-2 focus:outline-none" aria-label="Toggle Menu">
-            <svg class="h-5 w-5" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-              <path id="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Mobile Nav links -->
-    <div id="mobile-menu" class="hidden md:hidden border-t border-hairline bg-canvas px-4 py-3 space-y-1">
-      <a href="/" class="block px-3 py-2 rounded-md font-semibold text-sm text-body hover:text-primary hover:bg-canvas-soft-2">Home</a>
-      {categories.map((cat) => (
-        <a href={`/${cat.slug}`} class="block px-3 py-2 rounded-md font-semibold text-sm text-body hover:text-primary hover:bg-canvas-soft-2">
-          {cat.name}
+        <!-- Mobile: brand name -->
+        <a href="/" class="flex md:hidden font-black text-base tracking-tighter uppercase text-primary">
+          The Daily <span class="ml-1 bg-clip-text text-transparent bg-gradient-to-r from-gradient-dev-start to-highlight-pink">Drift</span>
         </a>
-      ))}
+      </nav>
+
+      <!-- Mobile hamburger -->
+      <button id="mobile-menu-btn"
+              class="flex md:hidden ml-auto p-2 rounded text-body hover:text-primary hover:bg-canvas-soft-2 transition-colors"
+              aria-label="Toggle menu">
+        <svg id="menu-icon" class="h-5 w-5" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
     </div>
-  </nav>
+  </div>
+
+  <!-- Mobile dropdown -->
+  <div id="mobile-menu" class="hidden md:hidden border-t border-hairline bg-canvas px-4 py-2 space-y-1">
+    <a href="/" class="block px-3 py-2 rounded text-sm font-semibold text-body hover:text-primary hover:bg-canvas-soft-2">Home</a>
+    {categories.map((cat) => (
+      <a href={`/${cat.slug}`} class="block px-3 py-2 rounded text-sm font-semibold text-body hover:text-primary hover:bg-canvas-soft-2">
+        {cat.name}
+      </a>
+    ))}
+  </div>
 </header>
 
 <script>
-  // Dynamic client-side date
+  // ── Date display ─────────────────────────────────────────────────
   const dateEl = document.getElementById('live-date');
   if (dateEl) {
-    const options: Intl.DateTimeFormatOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    dateEl.textContent = new Date().toLocaleDateString('en-US', options);
-  }
-
-  // ── Shrink header on scroll (hysteresis — no flicker) ───────────
-  const topbar      = document.getElementById('header-topbar');
-  const logoWrap    = document.getElementById('header-logo');
-  const compactLogo = document.getElementById('compact-logo');
-
-  const COLLAPSE_AT = 80;   // px — scroll DOWN past this → collapse
-  const EXPAND_AT   = 20;   // px — scroll UP back below this → expand
-
-  let isCollapsed = false;
-  let ticking = false;
-
-  function collapse() {
-    if (isCollapsed) return;          // already collapsed — skip DOM work
-    isCollapsed = true;
-    topbar?.classList.add('!hidden');
-    logoWrap?.classList.add('!py-0', '!max-h-0', '!overflow-hidden', '!opacity-0');
-    compactLogo?.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
-    compactLogo?.classList.add('opacity-100', 'pointer-events-auto');
-  }
-
-  function expand() {
-    if (!isCollapsed) return;         // already expanded — skip DOM work
-    isCollapsed = false;
-    topbar?.classList.remove('!hidden');
-    logoWrap?.classList.remove('!py-0', '!max-h-0', '!overflow-hidden', '!opacity-0');
-    compactLogo?.classList.add('hidden', 'opacity-0', 'pointer-events-none');
-    compactLogo?.classList.remove('opacity-100', 'pointer-events-auto');
-  }
-
-  function onScroll() {
-    const scrollY = window.scrollY;
-    if (scrollY > COLLAPSE_AT) collapse();
-    else if (scrollY < EXPAND_AT)  expand();
-    // Between EXPAND_AT and COLLAPSE_AT: do nothing → dead zone kills flicker
-    ticking = false;
-  }
-
-  window.addEventListener('scroll', () => {
-    if (!ticking) {
-      requestAnimationFrame(onScroll);
-      ticking = true;
-    }
-  }, { passive: true });
-
-  // ── Mobile menu ──────────────────────────────────────────────────
-  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-  const mobileMenu    = document.getElementById('mobile-menu');
-  const menuIcon      = document.getElementById('menu-icon');
-
-  if (mobileMenuBtn && mobileMenu && menuIcon) {
-    mobileMenuBtn.addEventListener('click', () => {
-      mobileMenu.classList.toggle('hidden');
-      const isHidden = mobileMenu.classList.contains('hidden');
-      menuIcon.setAttribute('d', isHidden
-        ? 'M4 6h16M4 12h16M4 18h16'
-        : 'M6 18L18 6M6 6l12 12'
-      );
+    dateEl.textContent = new Date().toLocaleDateString('en-US', {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
     });
   }
+
+  // ── Compact logo via IntersectionObserver (fires ONCE on state change, no flicker) ──
+  const mainLogo    = document.getElementById('main-logo-section');
+  const compactLogo = document.getElementById('nav-compact-logo');
+
+  if (mainLogo && compactLogo) {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // Logo left viewport → show compact logo
+        if (!entry.isIntersecting) {
+          compactLogo.classList.remove('opacity-0', 'pointer-events-none');
+          compactLogo.classList.add('opacity-100');
+        } else {
+          // Logo visible → hide compact logo
+          compactLogo.classList.add('opacity-0', 'pointer-events-none');
+          compactLogo.classList.remove('opacity-100');
+        }
+      },
+      { threshold: 0 }  // fire exactly when element edge crosses viewport
+    );
+    observer.observe(mainLogo);
+  }
+
+  // ── Mobile menu ──────────────────────────────────────────────────
+  const btn      = document.getElementById('mobile-menu-btn');
+  const menu     = document.getElementById('mobile-menu');
+  const menuIcon = document.getElementById('menu-icon');
+
+  btn?.addEventListener('click', () => {
+    const open = menu?.classList.toggle('hidden') === false;
+    menuIcon?.querySelector('path')?.setAttribute(
+      'd',
+      open ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'
+    );
+  });
 </script>
