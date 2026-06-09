@@ -1,0 +1,227 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection('blog');
+  return allPosts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+// Fetch related posts (same category, excluding this post)
+const allPosts = await getCollection('blog');
+const relatedPosts = allPosts
+  .filter((p) => p.data.category === post.data.category && p.id !== post.id)
+  .slice(0, 3);
+
+// Category branding metadata
+const categoryNames = {
+  'tech-ai': 'Tech & AI',
+  'memes-trends': 'Memes & Trends',
+  'creators': 'Creators',
+  'movies-ott': 'Movies & OTT',
+};
+
+const categoryColors = {
+  'tech-ai': 'text-cyan border-cyan/20 bg-cyan/5',
+  'memes-trends': 'text-highlight-pink border-highlight-pink/20 bg-highlight-pink/5',
+  'creators': 'text-violet border-violet/20 bg-violet/5',
+  'movies-ott': 'text-warning border-warning/20 bg-warning/5',
+};
+
+const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+// JSON-LD schema for Google Rich Snippets
+const postUrl = `https://thedailydrift.com/posts/${post.id}`;
+const blogPostSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  '@id': `${postUrl}/#post`,
+  'url': postUrl,
+  'headline': post.data.title,
+  'description': post.data.description,
+  'image': post.data.image,
+  'datePublished': post.data.pubDate.toISOString(),
+  'author': {
+    '@type': 'Person',
+    'name': post.data.author,
+    'image': post.data.authorImage
+  },
+  'publisher': {
+    '@id': 'https://thedailydrift.com/#organization'
+  },
+  'mainEntityOfPage': {
+    '@type': 'WebPage',
+    '@id': postUrl
+  }
+};
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  'itemListElement': [
+    {
+      '@type': 'ListItem',
+      'position': 1,
+      'name': 'Home',
+      'item': 'https://thedailydrift.com'
+    },
+    {
+      '@type': 'ListItem',
+      'position': 2,
+      'name': categoryNames[post.data.category],
+      'item': `https://thedailydrift.com/${post.data.category}`
+    },
+    {
+      '@type': 'ListItem',
+      'position': 3,
+      'name': post.data.title,
+      'item': postUrl
+    }
+  ]
+};
+---
+
+<Layout
+  title={`${post.data.title} | The Daily Drift`}
+  description={post.data.description}
+  image={post.data.image}
+  ogType="article"
+  canonicalUrl={postUrl}
+  jsonLd={[blogPostSchema, breadcrumbSchema]}
+>
+  <!-- Reading Progress Bar — sits at very top, above all content -->
+  <div id="progress-bar" class="fixed top-0 left-0 h-[3px] bg-gradient-to-r from-gradient-dev-start via-violet to-highlight-pink w-0 z-[60] transition-none"></div>
+
+  <!-- Decorative top gradient bar -->
+  <div class="h-1.5 w-full bg-gradient-to-r from-gradient-dev-start via-violet to-highlight-pink"></div>
+
+  <article class="max-w-4xl mx-auto px-6 py-10">
+    
+    <!-- Meta Header -->
+    <header class="space-y-6 text-center pb-8 border-b border-hairline">
+      
+      <!-- Category Badge -->
+      <a href={`/${post.data.category}`} class={`inline-block px-3 py-1 text-xs font-mono font-bold tracking-widest uppercase border rounded-full ${categoryColors[post.data.category]}`}>
+        {categoryNames[post.data.category]}
+      </a>
+
+      <!-- Title -->
+      <h1 class="font-sans font-black text-3xl md:text-5xl tracking-tight text-primary leading-tight max-w-3xl mx-auto">
+        {post.data.title}
+      </h1>
+
+      <!-- Short Excerpt -->
+      <p class="text-base md:text-lg text-body max-w-2xl mx-auto leading-relaxed italic">
+        {post.data.description}
+      </p>
+
+      <!-- Author and Date meta -->
+      <div class="flex items-center justify-center space-x-3 text-xs font-mono text-mute pt-2">
+        <img src={post.data.authorImage} alt={post.data.author} class="w-8 h-8 rounded-full border border-hairline object-cover" />
+        <div class="text-left">
+          <p class="font-semibold text-primary uppercase">{post.data.author}</p>
+          <p>Published: <time datetime={post.data.pubDate.toISOString()}>{formattedDate}</time> • 5 min read</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Large Featured Image -->
+    <div class="my-10 overflow-hidden rounded-lg aspect-video bg-canvas-soft border border-hairline">
+      <img src={post.data.image} alt={post.data.imageAlt} class="w-full h-full object-cover" />
+    </div>
+
+    <!-- Article Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      
+      <!-- Share buttons (Sticky left column) -->
+      <div class="hidden lg:block lg:col-span-1">
+        <div class="sticky top-32 space-y-4">
+          <p class="font-mono text-[10px] font-bold text-mute tracking-widest uppercase">Share Story</p>
+          <div class="flex flex-col space-y-2">
+            <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(postUrl)}&text=${encodeURIComponent(post.data.title)}`} target="_blank" rel="noopener" class="flex items-center space-x-2 text-xs font-mono text-mute hover:text-primary transition-colors border border-hairline py-2 px-3 rounded-md bg-canvas-soft">
+              <span>TWITTER</span>
+            </a>
+            <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(postUrl)}`} target="_blank" rel="noopener" class="flex items-center space-x-2 text-xs font-mono text-mute hover:text-primary transition-colors border border-hairline py-2 px-3 rounded-md bg-canvas-soft">
+              <span>FACEBOOK</span>
+            </a>
+            <button id="copy-link-btn" class="flex items-center space-x-2 text-xs font-mono text-mute hover:text-primary transition-colors border border-hairline py-2 px-3 rounded-md bg-canvas-soft text-left">
+              <span>COPY LINK</span>
+            </button>
+            <div id="copy-success" class="hidden text-[10px] font-mono text-cyan">✓ Link Copied!</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Body Text -->
+      <div class="lg:col-span-3 prose prose-invert max-w-none space-y-6 text-primary leading-relaxed text-sm md:text-base">
+        <!-- Rendered markdown content -->
+        <div class="dropcap font-sans space-y-6">
+          <Content />
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Related Articles Footer -->
+    {relatedPosts.length > 0 && (
+      <section class="border-t border-hairline mt-16 pt-10">
+        <h3 class="font-sans font-black text-xl uppercase tracking-tight text-primary mb-6">
+          Related Stories
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {relatedPosts.map((rPost) => (
+            <a href={`/posts/${rPost.id}`} class="group flex flex-col space-y-2 p-3 border border-hairline rounded-lg hover:border-hairline-strong transition-all bg-canvas">
+              <div class="aspect-video overflow-hidden rounded bg-canvas-soft">
+                <img src={rPost.data.image} alt={rPost.data.imageAlt} class="w-full h-full object-cover group-hover:scale-102 transition-transform duration-300" />
+              </div>
+              <span class="font-mono text-[9px] font-bold tracking-widest text-mute uppercase mt-1">
+                {categoryNames[rPost.data.category]}
+              </span>
+              <h4 class="font-sans font-bold text-sm leading-snug text-primary group-hover:text-link-color transition-colors line-clamp-2">
+                {rPost.data.title}
+              </h4>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+  </article>
+</Layout>
+
+<script>
+  // Reading progress indicator
+  window.addEventListener('scroll', () => {
+    const progressBar = document.getElementById('progress-bar');
+    if (progressBar) {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = winScroll > 0 ? (winScroll / height) * 100 : 0;
+      progressBar.style.width = scrolled + '%';
+    }
+  });
+
+  // Copy link functionality
+  const copyBtn = document.getElementById('copy-link-btn');
+  const copySuccess = document.getElementById('copy-success');
+  if (copyBtn && copySuccess) {
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        copySuccess.classList.remove('hidden');
+        setTimeout(() => {
+          copySuccess.classList.add('hidden');
+        }, 2000);
+      });
+    });
+  }
+</script>

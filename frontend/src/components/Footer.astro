@@ -1,0 +1,112 @@
+---
+const categories = [
+  { name: 'Tech & AI', slug: 'tech-ai' },
+  { name: 'Memes & Trends', slug: 'memes-trends' },
+  { name: 'Creators & Influencers', slug: 'creators' },
+  { name: 'Movies & OTT', slug: 'movies-ott' },
+];
+---
+
+<footer class="w-full bg-primary text-canvas-soft border-t border-hairline mt-12 py-16">
+  <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12">
+    
+    <!-- About Section -->
+    <div class="flex flex-col space-y-4 col-span-1 md:col-span-1">
+      <h2 class="font-sans font-extrabold text-xl tracking-tight uppercase text-canvas-soft">
+        The Daily <span class="text-cyan">Drift</span>
+      </h2>
+      <p class="text-xs text-mute font-sans leading-relaxed">
+        The Daily Drift is a premium editorial brand dedicated to covering tech breakthroughs, internet subcultures, creator economics, and film/series critique.
+      </p>
+      <div class="flex space-x-3 pt-2 text-mute text-sm font-mono">
+        <a href="https://twitter.com" class="hover:text-canvas transition-colors">TWITTER</a>
+        <span>·</span>
+        <a href="https://instagram.com" class="hover:text-canvas transition-colors">INSTAGRAM</a>
+        <span>·</span>
+        <a href="https://youtube.com" class="hover:text-canvas transition-colors">YOUTUBE</a>
+      </div>
+    </div>
+
+    <!-- Category Links -->
+    <div class="flex flex-col space-y-4">
+      <h3 class="font-mono text-xs font-bold tracking-widest text-mute uppercase">Streams</h3>
+      <ul class="space-y-2 text-sm">
+        {categories.map((cat) => (
+          <li>
+            <a href={`/${cat.slug}`} class="text-mute hover:text-canvas transition-colors">
+              {cat.name}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <!-- Corporate Links -->
+    <div class="flex flex-col space-y-4">
+      <h3 class="font-mono text-xs font-bold tracking-widest text-mute uppercase">Resources</h3>
+      <ul class="space-y-2 text-sm">
+        <li><a href="/sitemap-index.xml" class="text-mute hover:text-canvas transition-colors">Sitemap</a></li>
+        <li><a href="/robots.txt" class="text-mute hover:text-canvas transition-colors">Robots.txt</a></li>
+        <li><a href="#" class="text-mute hover:text-canvas transition-colors">Privacy Policy</a></li>
+        <li><a href="#" class="text-mute hover:text-canvas transition-colors">Terms of Service</a></li>
+      </ul>
+    </div>
+
+    <!-- Newsletter Capture -->
+    <div class="flex flex-col space-y-4 col-span-1 md:col-span-1">
+      <h3 class="font-mono text-xs font-bold tracking-widest text-mute uppercase">Stay Updated</h3>
+      <p class="text-xs text-mute leading-relaxed">
+        Join our exclusive community of tech enthusiasts and pop culture curators. No spam, just fresh drift.
+      </p>
+      <form id="newsletter-form" class="flex flex-col space-y-2 pt-2">
+        <label for="newsletter-email" class="sr-only">Email address</label>
+        <input
+          id="newsletter-email"
+          type="email"
+          placeholder="Enter your email"
+          required
+          class="w-full px-3 py-2 text-sm bg-[#222222] border border-[#333333] rounded-md text-canvas-soft placeholder-mute focus:outline-none focus:border-cyan transition-colors"
+        />
+        <button
+          type="submit"
+          class="w-full bg-canvas text-primary hover:bg-cyan hover:text-primary transition-all font-sans font-bold text-xs uppercase tracking-wider py-2 rounded-md"
+        >
+          Subscribe
+        </button>
+      </form>
+      <div id="newsletter-message" class="hidden text-xs text-cyan mt-1">
+        ✓ Welcome to the Drift! Check your inbox soon.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Copyright area -->
+  <div class="max-w-6xl mx-auto px-6 border-t border-[#222222] mt-12 pt-8 flex flex-col md:flex-row justify-between items-center text-[10px] font-mono text-mute">
+    <div>
+      © {new Date().getFullYear()} THE DAILY DRIFT MEDIA LLC. ALL RIGHTS RESERVED.
+    </div>
+    <div class="mt-4 md:mt-0">
+      POWERED BY <a href="https://astro.build" target="_blank" class="hover:text-canvas transition-colors underline">ASTRO</a> & <a href="https://tailwindcss.com" target="_blank" class="hover:text-canvas transition-colors underline">TAILWIND</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const form = document.getElementById('newsletter-form');
+  const message = document.getElementById('newsletter-message');
+  
+  if (form && message) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      // Emulate API Call
+      const emailInput = document.getElementById('newsletter-email') as HTMLInputElement;
+      if (emailInput) {
+        console.log('Subscribed:', emailInput.value);
+        emailInput.value = '';
+      }
+      form.classList.add('hidden');
+      message.classList.remove('hidden');
+    });
+  }
+</script>

@@ -1,0 +1,128 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import TrendingList from '../components/TrendingList.astro';
+
+// Fetch articles
+const allPosts = await getCollection('blog');
+const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+// Featured post (hero slot)
+const featuredPost = sortedPosts.find(post => post.data.featured) || sortedPosts[0];
+
+// Trending posts (for sidebar)
+const trendingPosts = sortedPosts.filter(post => post.data.trending).slice(0, 5);
+
+// Latest secondary posts (excluding featured)
+const latestPosts = sortedPosts.filter(post => post.id !== featuredPost?.id);
+
+const categoryNames = {
+  'tech-ai': 'Tech & AI',
+  'memes-trends': 'Memes & Trends',
+  'creators': 'Creators',
+  'movies-ott': 'Movies & OTT',
+};
+
+const categoryColors = {
+  'tech-ai': 'text-cyan border-cyan/20 bg-cyan/5',
+  'memes-trends': 'text-highlight-pink border-highlight-pink/20 bg-highlight-pink/5',
+  'creators': 'text-violet border-violet/20 bg-violet/5',
+  'movies-ott': 'text-warning border-warning/20 bg-warning/5',
+};
+---
+
+<Layout>
+  <!-- Decorative top gradient bar -->
+  <div class="h-1.5 w-full bg-gradient-to-r from-gradient-dev-start via-violet to-highlight-pink"></div>
+
+  <div class="max-w-6xl mx-auto px-6 py-8">
+    <!-- Main Editorial Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      
+      <!-- Left & Center: Hero Featured + Feed Grid (2 Columns on Large Screens) -->
+      <div class="lg:col-span-2 space-y-12">
+        {featuredPost && (
+          <section class="group border-b border-hairline pb-8">
+            <a href={`/posts/${featuredPost.id}`} class="block overflow-hidden rounded-lg aspect-video mb-6 bg-canvas-soft relative">
+              <img
+                src={featuredPost.data.image}
+                alt={featuredPost.data.imageAlt}
+                class="w-full h-full object-cover group-hover:scale-[1.01] transition-transform duration-500"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-transparent opacity-60"></div>
+            </a>
+            
+            <div class="space-y-4">
+              <div class="flex items-center space-x-2 text-xs font-mono tracking-wider">
+                <span class={`px-2.5 py-0.5 border rounded-full font-bold uppercase ${categoryColors[featuredPost.data.category]}`}>
+                  {categoryNames[featuredPost.data.category]}
+                </span>
+                <span class="text-mute">•</span>
+                <time datetime={featuredPost.data.pubDate.toISOString()} class="text-mute">
+                  {featuredPost.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                </time>
+              </div>
+              
+              <h2 class="font-sans font-black text-2xl md:text-4xl tracking-tight text-primary leading-tight group-hover:text-link-color transition-colors">
+                <a href={`/posts/${featuredPost.id}`}>
+                  {featuredPost.data.title}
+                </a>
+              </h2>
+              
+              <p class="text-sm md:text-base text-body leading-relaxed">
+                {featuredPost.data.description}
+              </p>
+              
+              <div class="flex items-center space-x-2 text-xs font-mono text-mute">
+                <span class="font-semibold text-primary uppercase">{featuredPost.data.author}</span>
+                <span>•</span>
+                <span>8 min read</span>
+              </div>
+            </div>
+          </section>
+        )}
+
+        <!-- Feed List Section -->
+        <section class="space-y-6">
+          <h3 class="font-sans font-black text-xl uppercase tracking-tight text-primary border-b border-hairline pb-3 mb-6">
+            Latest Stories
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {latestPosts.map((post) => (
+              <ArticleCard post={post} />
+            ))}
+          </div>
+        </section>
+      </div>
+
+      <!-- Right Column: Sidebar (Trending & Ads/Widgets) -->
+      <aside class="space-y-8 lg:border-l lg:border-hairline lg:pl-8">
+        <!-- Live Alert / Breaking widget -->
+        <div class="p-6 bg-canvas-soft border border-hairline rounded-lg space-y-3 relative overflow-hidden">
+          <div class="absolute -right-12 -top-12 w-24 h-24 bg-gradient-prev-start/10 rounded-full blur-xl"></div>
+          <div class="flex items-center space-x-2 text-[10px] font-mono font-bold tracking-wider text-violet uppercase">
+            <span class="w-1.5 h-1.5 rounded-full bg-violet animate-pulse"></span>
+            Weekly Highlights
+          </div>
+          <h4 class="font-sans font-bold text-sm text-primary">Creator economy hit record highs this month, streaming charts disrupted.</h4>
+          <p class="text-xs text-mute">Stay tuned for our upcoming interview with top industry leaders.</p>
+        </div>
+
+        <!-- Trending Widget -->
+        <TrendingList posts={trendingPosts} />
+
+        <!-- Static Editor Spotlight -->
+        <div class="bg-primary text-canvas-soft p-6 rounded-lg space-y-4 relative overflow-hidden">
+          <div class="absolute -left-12 -bottom-12 w-32 h-32 bg-cyan/10 rounded-full blur-2xl"></div>
+          <h4 class="font-mono text-[10px] font-bold tracking-widest text-cyan uppercase">Editorial Mission</h4>
+          <p class="font-sans font-medium text-sm leading-relaxed">
+            "Delivering unfiltered perspectives on technology disruption and the digital culture reshaping our world."
+          </p>
+          <div class="text-[9px] font-mono text-mute">— THE EDITORS</div>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+</Layout>
