@@ -1,0 +1,13 @@
+{
+  "name": "The Daily Drift",
+  "short_name": "Daily Drift",
+  "description": "Your premier source for Tech, Memes, Creators & Movie Reviews",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0a0a0a",
+  "icons": [
+    { "src": "/favicon.svg", "type": "image/svg+xml", "sizes": "any" },
+    { "src": "/favicon.ico", "sizes": "48x48", "type": "image/x-icon" }
+  ]
+}

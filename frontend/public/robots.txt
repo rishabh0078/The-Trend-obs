@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Block admin tools (local only — never deployed anyway)
+Disallow: /admin/
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://the-daily-drift-tau.vercel.app/sitemap-index.xml

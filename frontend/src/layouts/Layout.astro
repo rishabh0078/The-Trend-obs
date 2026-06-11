@@ -10,7 +10,16 @@ interface Props {
 	ogType?: string;
 	canonicalUrl?: string;
 	jsonLd?: Record<string, any> | Record<string, any>[];
+	article?: {
+		publishedTime?: string;
+		modifiedTime?: string;
+		author?: string;
+		tags?: string[];
+		section?: string;
+	};
 }
+
+const SITE_URL = 'https://the-daily-drift-tau.vercel.app';
 
 const {
 	title = 'The Daily Drift | Tech, Memes, Creators & Movie Reviews',
@@ -18,19 +27,22 @@ const {
 	image = '/images/og-default.jpg',
 	ogType = 'website',
 	canonicalUrl = Astro.url.href,
-	jsonLd
+	jsonLd,
+	article,
 } = Astro.props;
+
+const ogImageUrl = image.startsWith('http') ? image : `${SITE_URL}${image}`;
 
 // Default Organization schema
 const defaultOrgSchema = {
 	'@context': 'https://schema.org',
 	'@type': 'NewsMediaOrganization',
-	'@id': 'https://thedailydrift.com/#organization',
+	'@id': `${SITE_URL}/#organization`,
 	'name': 'The Daily Drift',
-	'url': 'https://thedailydrift.com',
+	'url': SITE_URL,
 	'logo': {
 		'@type': 'ImageObject',
-		'url': 'https://thedailydrift.com/logo.png',
+		'url': `${SITE_URL}/logo.png`,
 		'width': 600,
 		'height': 60
 	},
@@ -40,16 +52,19 @@ const defaultOrgSchema = {
 	]
 };
 
-// Default WebSite schema
+// Default WebSite schema with SearchAction (Sitelinks Search Box)
 const defaultWebSiteSchema = {
 	'@context': 'https://schema.org',
 	'@type': 'WebSite',
-	'@id': 'https://thedailydrift.com/#website',
+	'@id': `${SITE_URL}/#website`,
 	'name': 'The Daily Drift',
-	'url': 'https://thedailydrift.com',
+	'url': SITE_URL,
 	'description': description,
-	'publisher': {
-		'@id': 'https://thedailydrift.com/#organization'
+	'publisher': { '@id': `${SITE_URL}/#organization` },
+	'potentialAction': {
+		'@type': 'SearchAction',
+		'target': { '@type': 'EntryPoint', 'urlTemplate': `${SITE_URL}/search?q={search_term_string}` },
+		'query-input': 'required name=search_term_string'
 	}
 };
 
@@ -63,41 +78,74 @@ const schemas = jsonLd
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<!-- Favicons & App Icons -->
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
+		<link rel="icon" href="/favicon.ico" sizes="any" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		<link rel="manifest" href="/site.webmanifest" />
+		<meta name="theme-color" content="#0a0a0a" />
 		<meta name="generator" content={Astro.generator} />
 
-		<!-- Primary SEO Meta Tags -->
+		<!-- ── Primary SEO ─────────────────────────────────────────── -->
 		<title>{title}</title>
 		<meta name="title" content={title} />
 		<meta name="description" content={description} />
 		<link rel="canonical" href={canonicalUrl} />
+		<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
 
-		<!-- Open Graph / Facebook -->
+		<!-- ── Open Graph ──────────────────────────────────────────── -->
 		<meta property="og:type" content={ogType} />
+		<meta property="og:site_name" content="The Daily Drift" />
+		<meta property="og:locale" content="en_US" />
 		<meta property="og:url" content={canonicalUrl} />
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
-		<meta property="og:image" content={new URL(image, Astro.site || 'https://thedailydrift.com').href} />
+		<meta property="og:image" content={ogImageUrl} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content={title} />
 
-		<!-- Twitter -->
-		<meta property="twitter:card" content="summary_large_image" />
-		<meta property="twitter:url" content={canonicalUrl} />
-		<meta property="twitter:title" content={title} />
-		<meta property="twitter:description" content={description} />
-		<meta property="twitter:image" content={new URL(image, Astro.site || 'https://thedailydrift.com').href} />
+		<!-- ── Article-specific OG (for article pages) ─────────────── -->
+		{article && (
+			<>
+				<meta property="article:published_time" content={article.publishedTime} />
+				{article.modifiedTime && <meta property="article:modified_time" content={article.modifiedTime} />}
+				{article.author && <meta property="article:author" content={article.author} />}
+				{article.section && <meta property="article:section" content={article.section} />}
+				{article.tags?.map(tag => <meta property="article:tag" content={tag} />)}
+			</>
+		)}
 
-		<!-- Fonts preconnect and loading -->
+		<!-- ── Twitter / X Card ────────────────────────────────────── -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:site" content="@thedailydrift" />
+		<meta name="twitter:creator" content="@thedailydrift" />
+		<meta name="twitter:url" content={canonicalUrl} />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={ogImageUrl} />
+		<meta name="twitter:image:alt" content={title} />
+
+		<!-- ── Performance: Fonts ──────────────────────────────────── -->
+		<!-- Preconnect first, then load fonts with display=swap for zero render-blocking -->
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+		<!-- font-display:swap is set via &display=swap — text stays visible during font load -->
+		<link
+			href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+			rel="stylesheet"
+			media="print"
+			onload="this.media='all'"
+		/>
+		<noscript>
+			<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+		</noscript>
 
-		<!-- JSON-LD Structured Data -->
-		{
-			schemas.map((schema) => (
-				<script type="application/ld+json" set:html={JSON.stringify(schema)} />
-			))
-		}
+		<!-- ── JSON-LD Structured Data ─────────────────────────────── -->
+		{schemas.map((schema) => (
+			<script type="application/ld+json" set:html={JSON.stringify(schema)} />
+		))}
 	</head>
 	<body class="bg-canvas text-ink min-h-screen flex flex-col selection:bg-primary selection:text-canvas-soft">
 		<Header />

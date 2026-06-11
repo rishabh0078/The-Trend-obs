@@ -15,6 +15,7 @@ const blog = defineCollection({
     imageAlt: z.string(),
     featured: z.boolean().optional().default(false),
     trending: z.boolean().optional().default(false),
+    weeklyHighlight: z.boolean().optional().default(false),
   }),
 });
 

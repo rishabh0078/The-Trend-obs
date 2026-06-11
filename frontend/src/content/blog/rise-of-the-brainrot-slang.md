@@ -1,14 +1,25 @@
 ---
-title: "The Rise of Brainrot Slang: Decoding Gen Alpha Internet Humor"
-description: "From 'skibidi' to 'gyatt' and 'rizz', we decode the linguistic structure and cultural velocity of Gen Alpha's surreal internet dialect."
-pubDate: 2026-06-07
-author: "Emma Watson"
-authorImage: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=150&auto=format&fit=crop"
-category: "memes-trends"
-tags: ["Internet Culture", "TikTok", "Gen Alpha", "Meme Trends", "Linguistics"]
-image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1200&auto=format&fit=crop"
-imageAlt: "Vibrant gaming console neon controller lighting up in the dark, representing youth digital trends"
-featured: false
+title: 'The Rise of Brainrot Slang: Decoding Gen Alpha Internet Humor'
+description: >-
+  From 'skibidi' to 'gyatt' and 'rizz', we decode the linguistic structure and
+  cultural velocity of Gen Alpha's surreal internet dialect.
+pubDate: '2026-06-07T00:00:00.000Z'
+author: Emma Watson
+authorImage: >-
+  https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=150&auto=format&fit=crop
+category: memes-trends
+tags:
+  - Internet Culture
+  - TikTok
+  - Gen Alpha
+  - Meme Trends
+  - Linguistics
+image: >-
+  https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=1200&auto=format&fit=crop
+imageAlt: >-
+  Vibrant gaming console neon controller lighting up in the dark, representing
+  youth digital trends
+featured: true
 trending: true
 ---
 

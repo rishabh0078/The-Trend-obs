@@ -9,12 +9,20 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "admin": "node admin-server.js",
+    "dev:all": "concurrently \"npm run dev\" \"npm run admin\""
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
     "@tailwindcss/vite": "^4.3.0",
     "astro": "^6.4.5",
     "tailwindcss": "^4.3.0"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.3",
+    "express": "^5.2.1",
+    "gray-matter": "^4.0.3",
+    "multer": "^2.1.1"
   }
 }

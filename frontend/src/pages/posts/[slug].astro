@@ -40,8 +40,9 @@ const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
   day: 'numeric',
 });
 
-// JSON-LD schema for Google Rich Snippets
-const postUrl = `https://thedailydrift.com/posts/${post.id}`;
+const SITE = 'https://the-daily-drift-tau.vercel.app';
+const postUrl = `${SITE}/posts/${post.id}`;
+
 const blogPostSchema = {
   '@context': 'https://schema.org',
   '@type': 'BlogPosting',
@@ -49,20 +50,25 @@ const blogPostSchema = {
   'url': postUrl,
   'headline': post.data.title,
   'description': post.data.description,
-  'image': post.data.image,
+  'image': {
+    '@type': 'ImageObject',
+    'url': post.data.image,
+    'width': 1200,
+    'height': 630,
+  },
   'datePublished': post.data.pubDate.toISOString(),
+  'dateModified': post.data.pubDate.toISOString(),
+  'keywords': post.data.tags.join(', '),
+  'articleSection': categoryNames[post.data.category],
+  'inLanguage': 'en-US',
   'author': {
     '@type': 'Person',
     'name': post.data.author,
-    'image': post.data.authorImage
+    'image': post.data.authorImage,
   },
-  'publisher': {
-    '@id': 'https://thedailydrift.com/#organization'
-  },
-  'mainEntityOfPage': {
-    '@type': 'WebPage',
-    '@id': postUrl
-  }
+  'publisher': { '@id': `${SITE}/#organization` },
+  'mainEntityOfPage': { '@type': 'WebPage', '@id': postUrl },
+  'isPartOf': { '@id': 'https://thedailydrift.com/#website' },
 };
 
 const breadcrumbSchema = {
@@ -73,13 +79,13 @@ const breadcrumbSchema = {
       '@type': 'ListItem',
       'position': 1,
       'name': 'Home',
-      'item': 'https://thedailydrift.com'
+      'item': SITE
     },
     {
       '@type': 'ListItem',
       'position': 2,
       'name': categoryNames[post.data.category],
-      'item': `https://thedailydrift.com/${post.data.category}`
+      'item': `${SITE}/${post.data.category}`
     },
     {
       '@type': 'ListItem',
@@ -98,6 +104,13 @@ const breadcrumbSchema = {
   ogType="article"
   canonicalUrl={postUrl}
   jsonLd={[blogPostSchema, breadcrumbSchema]}
+  article={{
+    publishedTime: post.data.pubDate.toISOString(),
+    modifiedTime: post.data.pubDate.toISOString(),
+    author: post.data.author,
+    section: categoryNames[post.data.category],
+    tags: post.data.tags,
+  }}
 >
   <!-- Reading Progress Bar — sits at very top, above all content -->
   <div id="progress-bar" class="fixed top-0 left-0 h-[3px] bg-gradient-to-r from-gradient-dev-start via-violet to-highlight-pink w-0 z-[60] transition-none"></div>
