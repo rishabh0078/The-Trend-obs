@@ -131,6 +131,15 @@ const schemas = jsonLd
 		<!-- Preconnect first, then load fonts with display=swap for zero render-blocking -->
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<!-- Google Analytics (gtag.js) -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-DQEKFP7B1X"></script>
+		<script is:inline>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+
+			gtag('config', 'G-DQEKFP7B1X');
+		</script>
 		<!-- font-display:swap is set via &display=swap — text stays visible during font load -->
 		<link
 			href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
