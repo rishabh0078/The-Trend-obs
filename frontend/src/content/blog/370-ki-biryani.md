@@ -17,7 +17,8 @@ image: /images/370-biryani-1781193976473.png
 imageAlt: 370 biryani controversy
 featured: true
 trending: true
-weeklyHighlight: false
+weeklyHighlight: true
+draft: false
 ---
 
 Every couple of months the Indian Internet comes up with a fresh national obsession. It can be a dance craze, it can be a cricket moment or it can be some plate of ₹370 biryani. Of course the much talked about "**370 Ki Biryani**" meme is making its way into the "Indian Meme Hall of Fame" and yet again, social media has been the set-up for a random conversation becoming a nation-wide event in no time.

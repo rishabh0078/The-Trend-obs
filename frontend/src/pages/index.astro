@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import ArticleCard from '../components/ArticleCard.astro';
 import TrendingList from '../components/TrendingList.astro';
+import { calculateReadTime } from '../utils/readTime';
 
 // Fetch articles
 const allPosts = await getCollection('blog', ({ data }) => import.meta.env.DEV || !data.draft);
@@ -10,6 +11,8 @@ const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pu
 
 // Featured post (hero slot)
 const featuredPost = sortedPosts.find(post => post.data.featured) || sortedPosts[0];
+const featuredReadTime = featuredPost ? calculateReadTime(featuredPost.body) : 0;
+
 
 // Trending posts (for sidebar)
 const trendingPosts = sortedPosts.filter(post => post.data.trending).slice(0, 5);
@@ -39,46 +42,7 @@ const categoryColors = {
   <!-- Decorative top gradient bar -->
   <div class="h-1.5 w-full bg-gradient-to-r from-gradient-dev-start via-violet to-highlight-pink"></div>
 
-  <!-- ── This Week's Best ─────────────────────────────────────────── -->
-  {weeklyHighlights.length > 0 && (
-    <section class="border-b border-hairline bg-canvas-soft">
-      <div class="max-w-6xl mx-auto px-6 py-8">
-        <div class="flex items-center gap-3 mb-6">
-          <span class="flex items-center gap-1.5 text-[10px] font-mono font-bold tracking-widest text-violet uppercase">
-            <span class="w-1.5 h-1.5 rounded-full bg-violet animate-pulse inline-block"></span>
-            This Week's Best
-          </span>
-          <div class="flex-1 h-px bg-hairline"></div>
-          <span class="text-[10px] font-mono text-mute uppercase tracking-wider">Editor's Picks</span>
-        </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {weeklyHighlights.map((post) => (
-            <a href={`/posts/${post.id}`} class="group flex flex-col gap-3">
-              <div class="overflow-hidden rounded-lg aspect-video bg-canvas-soft relative">
-                <img
-                  src={post.data.image}
-                  alt={post.data.imageAlt}
-                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  loading="lazy"
-                />
-                <span class={`absolute top-2 left-2 px-2 py-0.5 text-[10px] font-bold font-mono uppercase rounded-full border ${categoryColors[post.data.category]}`}>
-                  {categoryNames[post.data.category]}
-                </span>
-              </div>
-              <h3 class="font-sans font-bold text-sm text-primary leading-snug group-hover:text-violet transition-colors line-clamp-2">
-                {post.data.title}
-              </h3>
-              <div class="text-[11px] font-mono text-mute">
-                {post.data.pubDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                {' · '}{post.data.author}
-              </div>
-            </a>
-          ))}
-        </div>
-      </div>
-    </section>
-  )}
 
   <div class="max-w-6xl mx-auto px-6 py-8">
     <!-- Main Editorial Layout -->
@@ -121,7 +85,7 @@ const categoryColors = {
               <div class="flex items-center space-x-2 text-xs font-mono text-mute">
                 <span class="font-semibold text-primary uppercase">{featuredPost.data.author}</span>
                 <span>•</span>
-                <span>8 min read</span>
+                <span>{featuredReadTime} min read</span>
               </div>
             </div>
           </section>
@@ -143,15 +107,31 @@ const categoryColors = {
       <!-- Right Column: Sidebar (Trending & Ads/Widgets) -->
       <aside class="space-y-8 lg:border-l lg:border-hairline lg:pl-8">
         <!-- Live Alert / Breaking widget -->
-        <div class="p-6 bg-canvas-soft border border-hairline rounded-lg space-y-3 relative overflow-hidden">
-          <div class="absolute -right-12 -top-12 w-24 h-24 bg-gradient-prev-start/10 rounded-full blur-xl"></div>
-          <div class="flex items-center space-x-2 text-[10px] font-mono font-bold tracking-wider text-violet uppercase">
-            <span class="w-1.5 h-1.5 rounded-full bg-violet animate-pulse"></span>
-            Weekly Highlights
+        {weeklyHighlights.length > 0 ? (
+          <a href={`/posts/${weeklyHighlights[0].id}`} class="block p-6 bg-canvas-soft border border-hairline hover:border-violet/40 rounded-lg space-y-3 relative overflow-hidden transition-all duration-350 group hover:shadow-sm">
+            <div class="absolute -right-12 -top-12 w-24 h-24 bg-gradient-prev-start/10 rounded-full blur-xl"></div>
+            <div class="flex items-center space-x-2 text-[10px] font-mono font-bold tracking-wider text-violet uppercase">
+              <span class="w-1.5 h-1.5 rounded-full bg-violet animate-pulse"></span>
+              Weekly Highlights
+            </div>
+            <h4 class="font-sans font-bold text-sm text-primary group-hover:text-violet transition-colors">
+              {weeklyHighlights[0].data.title}
+            </h4>
+            <p class="text-xs text-mute leading-relaxed line-clamp-3">
+              {weeklyHighlights[0].data.description}
+            </p>
+          </a>
+        ) : (
+          <div class="p-6 bg-canvas-soft border border-hairline rounded-lg space-y-3 relative overflow-hidden">
+            <div class="absolute -right-12 -top-12 w-24 h-24 bg-gradient-prev-start/10 rounded-full blur-xl"></div>
+            <div class="flex items-center space-x-2 text-[10px] font-mono font-bold tracking-wider text-violet uppercase">
+              <span class="w-1.5 h-1.5 rounded-full bg-violet animate-pulse"></span>
+              Weekly Highlights
+            </div>
+            <h4 class="font-sans font-bold text-sm text-primary">Creator economy hit record highs this month, streaming charts disrupted.</h4>
+            <p class="text-xs text-mute">Stay tuned for our upcoming interview with top industry leaders.</p>
           </div>
-          <h4 class="font-sans font-bold text-sm text-primary">Creator economy hit record highs this month, streaming charts disrupted.</h4>
-          <p class="text-xs text-mute">Stay tuned for our upcoming interview with top industry leaders.</p>
-        </div>
+        )}
 
         <!-- Trending Widget -->
         <TrendingList posts={trendingPosts} />

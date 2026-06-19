@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Build outputs
+dist/
+.dist/
+**/dist/
+
+# Astro
+.astro/
+**/.astro/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/settings.json
+*.log
+
+# Agent configurations & locks
+.agents/
+skills-lock.json
+
+# Design document
+DESIGN.md
+
