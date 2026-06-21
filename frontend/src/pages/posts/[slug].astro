@@ -165,10 +165,7 @@ const breadcrumbSchema = {
           <p class="font-mono text-[10px] font-bold text-mute tracking-widest uppercase">Share Story</p>
           <div class="flex flex-col space-y-2">
             <a href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(postUrl)}&text=${encodeURIComponent(post.data.title)}`} target="_blank" rel="noopener" class="flex items-center space-x-2 text-xs font-mono text-mute hover:text-primary transition-colors border border-hairline py-2 px-3 rounded-md bg-canvas-soft">
-              <span>TWITTER</span>
-            </a>
-            <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(postUrl)}`} target="_blank" rel="noopener" class="flex items-center space-x-2 text-xs font-mono text-mute hover:text-primary transition-colors border border-hairline py-2 px-3 rounded-md bg-canvas-soft">
-              <span>FACEBOOK</span>
+              <span>X</span>
             </a>
             <button id="copy-link-btn" class="flex items-center space-x-2 text-xs font-mono text-mute hover:text-primary transition-colors border border-hairline py-2 px-3 rounded-md bg-canvas-soft text-left">
               <span>COPY LINK</span>
