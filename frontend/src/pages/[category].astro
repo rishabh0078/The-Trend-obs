@@ -61,15 +61,16 @@ const meta = categoryMetadata[category as keyof typeof categoryMetadata] || {
 };
 
 // Collection Schema for Google SEO
+const SITE = 'https://the-daily-drift-tau.vercel.app';
 const collectionSchema = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
-  '@id': `https://thedailydrift.com/${category}/#collection`,
-  'url': `https://thedailydrift.com/${category}`,
+  '@id': `${SITE}/${category}/#collection`,
+  'url': `${SITE}/${category}`,
   'name': `${meta.name} Articles | The Daily Drift`,
   'description': meta.description,
   'isPartOf': {
-    '@id': 'https://thedailydrift.com/#website'
+    '@id': `${SITE}/#website`
   },
   'about': {
     '@type': 'Thing',

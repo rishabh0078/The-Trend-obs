@@ -71,7 +71,7 @@ const blogPostSchema = {
   },
   'publisher': { '@id': `${SITE}/#organization` },
   'mainEntityOfPage': { '@type': 'WebPage', '@id': postUrl },
-  'isPartOf': { '@id': 'https://thedailydrift.com/#website' },
+  'isPartOf': { '@id': `${SITE}/#website` },
 };
 
 const breadcrumbSchema = {
@@ -153,7 +153,7 @@ const breadcrumbSchema = {
 
     <!-- Large Featured Image -->
     <div class="my-10 overflow-hidden rounded-lg aspect-video bg-canvas-soft border border-hairline">
-      <img src={post.data.image} alt={post.data.imageAlt} class="w-full h-full object-cover" />
+      <img src={post.data.image} alt={post.data.imageAlt} loading="lazy" decoding="async" class="w-full h-full object-cover" />
     </div>
 
     <!-- Article Content Grid -->

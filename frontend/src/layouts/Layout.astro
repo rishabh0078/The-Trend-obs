@@ -46,10 +46,7 @@ const defaultOrgSchema = {
 		'width': 600,
 		'height': 60
 	},
-	'sameAs': [
-		'https://twitter.com/thedailydrift',
-		'https://instagram.com/thedailydrift'
-	]
+	'sameAs': []
 };
 
 // Default WebSite schema with SearchAction (Sitelinks Search Box)
@@ -60,12 +57,7 @@ const defaultWebSiteSchema = {
 	'name': 'The Daily Drift',
 	'url': SITE_URL,
 	'description': description,
-	'publisher': { '@id': `${SITE_URL}/#organization` },
-	'potentialAction': {
-		'@type': 'SearchAction',
-		'target': { '@type': 'EntryPoint', 'urlTemplate': `${SITE_URL}/search?q={search_term_string}` },
-		'query-input': 'required name=search_term_string'
-	}
+	'publisher': { '@id': `${SITE_URL}/#organization` }
 };
 
 const schemas = jsonLd
