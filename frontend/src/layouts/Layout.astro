@@ -49,7 +49,7 @@ const defaultOrgSchema = {
 	'sameAs': []
 };
 
-// Default WebSite schema with SearchAction (Sitelinks Search Box)
+// Default WebSite schema
 const defaultWebSiteSchema = {
 	'@context': 'https://schema.org',
 	'@type': 'WebSite',
@@ -61,7 +61,7 @@ const defaultWebSiteSchema = {
 };
 
 const schemas = jsonLd
-	? (Array.isArray(jsonLd) ? [defaultOrgSchema, ...jsonLd] : [defaultOrgSchema, defaultWebSiteSchema, jsonLd])
+	? (Array.isArray(jsonLd) ? [defaultOrgSchema, defaultWebSiteSchema, ...jsonLd] : [defaultOrgSchema, defaultWebSiteSchema, jsonLd])
 	: [defaultOrgSchema, defaultWebSiteSchema];
 ---
 
@@ -111,8 +111,7 @@ const schemas = jsonLd
 
 		<!-- ── Twitter / X Card ────────────────────────────────────── -->
 		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:site" content="@thedailydrift" />
-		<meta name="twitter:creator" content="@thedailydrift" />
+		<!-- twitter:site and twitter:creator omitted until real account is created -->
 		<meta name="twitter:url" content={canonicalUrl} />
 		<meta name="twitter:title" content={title} />
 		<meta name="twitter:description" content={description} />

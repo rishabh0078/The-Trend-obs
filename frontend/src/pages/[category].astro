@@ -104,6 +104,27 @@ const collectionSchema = {
       </div>
     </header>
 
+    {/* AI Movie Finder CTA — only on Movies & OTT page */}
+    {category === 'movies-ott' && (
+      <a href="/movie-finder" class="group block border border-violet/20 bg-gradient-to-r from-violet/5 via-canvas to-highlight-pink/5 rounded-lg p-6 mb-10 hover:border-violet/40 transition-all duration-300 relative overflow-hidden">
+        <div class="absolute right-0 top-0 w-32 h-32 bg-violet/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="relative flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-2xl">🎬</span>
+              <h3 class="font-sans font-black text-lg uppercase tracking-tight text-primary">AI Movie Finder</h3>
+              <span class="px-2 py-0.5 text-[10px] font-mono font-bold tracking-widest uppercase bg-violet/15 text-violet rounded-full">New Tool</span>
+            </div>
+            <p class="text-sm text-body max-w-lg">Can't remember a movie's name? Describe the plot, a scene, or a quote — our AI will identify it instantly. Free & unlimited.</p>
+          </div>
+          <div class="shrink-0 flex items-center gap-2 text-sm font-bold text-violet group-hover:gap-3 transition-all">
+            Try It Now
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+          </div>
+        </div>
+      </a>
+    )}
+
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       
       <!-- Main Content Grid -->

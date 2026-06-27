@@ -1,0 +1,79 @@
+{
+  "seo": {
+    "title": "Movie Finder AI – Describe a Movie & Find Its Name | The Daily Drift",
+    "description": "Use the best free movie finder online. Find a movie by describing it, a scene, a character, or a quote. Our Movie Finder AI will identify it instantly.",
+    "tags": "Movie Finder AI, movie finder by description, movie finder online, find movie with description, movie finder free, movie finder ai online, movie identifier"
+  },
+  "hero": {
+    "badge": "Free Movie Finder Online",
+    "h1_line1": "Movie Finder AI.",
+    "h1_line2": "Find a Movie by Description.",
+    "subtitle": "Use our free movie finder online to identify any film. Just describe a scene, a character, or a vague plot — our AI will find the movie with description alone.",
+    "tagline": "Free · Unlimited · Instant Results"
+  },
+  "search": {
+    "label": "Describe your movie",
+    "placeholder": "e.g. A sci-fi movie where a guy gets stranded on Mars and has to grow potatoes to survive...",
+    "button_text": "Find The Movie",
+    "loading_text": "Identifying..."
+  },
+  "examples": [
+    {
+      "label": "🎬 Truman Show vibes",
+      "text": "A movie about a guy who finds out his whole life is a TV show"
+    },
+    {
+      "label": "🌀 Dream layers",
+      "text": "A movie where dreams have layers and you can go into someone else's dream"
+    },
+    {
+      "label": "👽 Indian sci-fi satire",
+      "text": "An Indian movie where a guy pretends to be an alien and questions blind faith"
+    }
+  ],
+  "howItWorks": {
+    "heading": "How It Works",
+    "subheading": "Three steps. Zero sign-ups.",
+    "steps": [
+      {
+        "emoji": "✍️",
+        "step": "Step 01",
+        "title": "Describe It",
+        "description": "Type whatever you remember — a scene, a character, a feeling. Even vague descriptions work."
+      },
+      {
+        "emoji": "🧠",
+        "step": "Step 02",
+        "title": "AI Identifies",
+        "description": "Our AI cross-references millions of movies in seconds. Plot details, quotes, character traits — it understands them all."
+      },
+      {
+        "emoji": "🎬",
+        "step": "Step 03",
+        "title": "Get the Title",
+        "description": "Get the movie title, year, director, and a clean summary. No sign-up. No limits. Instantly."
+      }
+    ]
+  },
+  "faq": {
+    "heading": "Frequently Asked Questions",
+    "items": [
+      {
+        "question": "How do I find a movie by description?",
+        "answer": "Our Movie Finder AI analyzes your plot description and cross-references millions of films. Simply type what you remember—a scene, a quote, or character details—and our movie finder website will instantly identify the exact title."
+      },
+      {
+        "question": "Is this movie finder by description free?",
+        "answer": "Yes, our movie finder by description is 100% free with no sign-up, no subscription, and no limits. Use this movie finder online as many times as you want — completely free forever."
+      },
+      {
+        "question": "Does this movie finder website work for Bollywood, anime, or international films?",
+        "answer": "Absolutely! Our movie finder website works for Hollywood, Bollywood, Korean cinema, Japanese anime, European art-house films, and more. Just describe the movie in English, and the Movie Finder AI will accurately identify it regardless of its original language."
+      },
+      {
+        "question": "Can I find a movie with description if I only remember a vague scene?",
+        "answer": "That is exactly what this tool is built for! You can find a movie with description even if it is vague or incomplete. Something like 'a movie where a kid befriends an alien and they fly on a bicycle' is more than enough for our AI to identify it."
+      }
+    ]
+  }
+}
