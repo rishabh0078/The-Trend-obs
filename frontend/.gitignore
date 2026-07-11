@@ -23,6 +23,4 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
-# ── Local CMS (never deploy to Vercel) ──
-admin-ui/
-admin-server.js
+
